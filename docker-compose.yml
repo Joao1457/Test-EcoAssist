@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  backend:
+    container_name: api-backend
+    build:
+      context: ./back/ecotestback   # Caminho para o diretório do backend
+    volumes:
+      - ./back/ecotestback:/var/www/html
+      - ./back/ecotestback/.env:/var/www/html/.env
+    ports:
+      - "8080:80"  # Expondo a porta 80 do backend na porta 8080
+    networks:
+      - app-network
+    depends_on:
+      - db  # Dependência do banco de dados, que estará configurado abaixo
+
+  frontend:
+    container_name: react-frontend
+    build:
+      context: ./front/ecotest  # Caminho para o diretório do frontend
+    volumes:
+      - ./front/ecotest:/app
+    ports:
+      - "3000:80"  # Expondo a porta 80 do frontend na porta 3000
+    networks:
+      - app-network
+    environment:
+      - REACT_APP_BACKEND_URL=http://api-backend:8080  # URL do backend no Docker
+    depends_on:
+      - backend  # O frontend depende do backend
+
+  db:
+    image: mysql:5.7
+    container_name: mysql_db
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: ecotest
+    ports:
+      - "3307:3306"
+    networks:
+      - app-network
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    ports:
+      - "8081:80"
+    networks:
+      - app-network
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: swagger-ui
+    ports:
+      - "8090:8080" 
+    volumes:
+      - ./back/ecotestback/application/public/swagger:/swagger
+    environment:
+      - SWAGGER_JSON=/swagger/swagger.json 
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local

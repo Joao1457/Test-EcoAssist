@@ -1,0 +1,151 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+	  "title": "Tarefas API",
+	  "version": "1.0.0",
+	  "description": "API para gerenciamento de tarefas com CRUD."
+	},
+	"servers": [
+	  {
+		"url": "http://localhost:8080",
+		"description": "Servidor local"
+	  }
+	],
+	"paths": {
+	  "/": {
+		"get": {
+		  "summary": "Listar ou obter tarefa por ID",
+		  "parameters": [
+			{
+			  "name": "id",
+			  "in": "query",
+			  "description": "ID da tarefa a ser buscada",
+			  "required": false,
+			  "schema": {
+				"type": "integer"
+			  }
+			},
+			{
+			  "name": "pagenum",
+			  "in": "query",
+			  "description": "Número da página para paginação",
+			  "required": false,
+			  "schema": {
+				"type": "integer",
+				"default": 0
+			  }
+			},
+			{
+			  "name": "pagesize",
+			  "in": "query",
+			  "description": "Quantidade de registros por página",
+			  "required": false,
+			  "schema": {
+				"type": "integer",
+				"default": 10
+			  }
+			}
+		  ],
+		  "responses": {
+			"200": {
+			  "description": "Sucesso",
+			  "content": {
+				"application/json": {
+				  "example": {
+					"error": false,
+					"message": "Success: Data retrieved",
+					"data": []
+				  }
+				}
+			  }
+			},
+			"400": {
+			  "description": "Erro nos parâmetros da requisição"
+			}
+		  }
+		},
+		"post": {
+		  "summary": "Criar uma nova tarefa",
+		  "requestBody": {
+			"required": true,
+			"content": {
+			  "application/json": {
+				"schema": {
+				  "type": "object",
+				  "properties": {
+					"nome_tarefa": { "type": "string" },
+					"descricao": { "type": "string" },
+					"data": { "type": "string", "format": "date" },
+					"hora": { "type": "string", "format": "time" },
+					"status": { "type": "string" }
+				  },
+				  "required": ["nome_tarefa", "data", "hora", "status"]
+				}
+			  }
+			}
+		  },
+		  "responses": {
+			"201": {
+			  "description": "Tarefa criada com sucesso"
+			},
+			"400": {
+			  "description": "Erro ao criar tarefa"
+			}
+		  }
+		},
+		"put": {
+		  "summary": "Atualizar uma tarefa",
+		  "requestBody": {
+			"required": true,
+			"content": {
+			  "application/json": {
+				"schema": {
+				  "type": "object",
+				  "properties": {
+					"id": { "type": "integer" },
+					"nome_tarefa": { "type": "string" },
+					"descricao": { "type": "string" },
+					"data": { "type": "string", "format": "date" },
+					"hora": { "type": "string", "format": "time" },
+					"status": { "type": "string" }
+				  },
+				  "required": ["id", "nome_tarefa", "data", "hora", "status"]
+				}
+			  }
+			}
+		  },
+		  "responses": {
+			"200": {
+			  "description": "Tarefa atualizada com sucesso"
+			},
+			"400": {
+			  "description": "Erro ao atualizar tarefa"
+			}
+		  }
+		},
+		"delete": {
+		  "summary": "Deletar uma tarefa",
+		  "parameters": [
+			{
+			  "name": "id",
+			  "in": "query",
+			  "description": "ID da tarefa a ser deletada",
+			  "required": true,
+			  "schema": {
+				"type": "integer"
+			  }
+			}
+		  ],
+		  "responses": {
+			"200": {
+			  "description": "Tarefa deletada com sucesso"
+			},
+			"400": {
+			  "description": "Erro ao deletar tarefa"
+			}
+		  }
+		}
+	  }
+	}
+  }
+  
