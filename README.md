@@ -21,7 +21,7 @@ cd front/ecotest
 
 npm install
 
-#Configure o Banco de dados, Utilizei o MySQL no phpmyadmin
+#Configure o Banco de dados, Utilizei o MySQL no phpmyadmin - Mantive umas consultas SQL prontas para gerar a tabela necessária.
 
 #Rode build o docker
 
